@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\
+{FrontPostController, HomeController};
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,12 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+use UniSharp\LaravelFilemanager\Lfm;
+
+Route::get('/', [FrontPostController::class, 'index'])->name('home');
+
+Route::prefix('posts')->name('posts.')->group(function () {
+    Route::get('{slug}', [FrontPostController::class, 'show'])->name('display');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('author/{user}', [FrontPostController::class, 'author'])->name('author');
+Route::get('category/{category:slug}', [FrontPostController::class, 'category'])->name('category');
 
-require __DIR__.'/auth.php';
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => 'auth'], function () {
+    Lfm::routes();
+});
+
+Auth::routes();
+
+Route::get('/home', [HomeController::class, 'index']);

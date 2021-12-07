@@ -25,7 +25,7 @@ class PostSeeder extends Seeder
                     'slug' => 'post-' . $i,
                     'seo_title' => 'Post ' . $i,
                     'user_id' => $redactors->random(),
-                    'image' => 'thumb-' . $i . '.jpg',
+                    'image' => $i . '.jpg',
                 ]);
 
                 $post->tags()->attach($tags->shuffle()->slice(0, random_int(2, $tags->count())));

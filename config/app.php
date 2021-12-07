@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Laravel 8 Blog'),
 
     /*
     |--------------------------------------------------------------------------
@@ -134,6 +134,25 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | Pagination Configuration
+    |--------------------------------------------------------------------------
+    */
+
+    'nbrPages' => [
+        'posts' => 6,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | SEO
+    |--------------------------------------------------------------------------
+    */
+
+    'description' => 'The best blog in the world',
+    'author' => 'The best author',
+
     'providers' => [
 
         /*
@@ -174,7 +193,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\Providers\ViewServiceProvider::class,
     ],
 
     /*

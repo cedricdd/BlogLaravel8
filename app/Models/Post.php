@@ -23,6 +23,7 @@ class Post extends Model
         'user_id',
     ];
 
+    /**Relations**/
     public function categories() {
         return $this->belongsToMany(Category::class)->withTimestamps();
     }
@@ -32,7 +33,7 @@ class Post extends Model
     }
 
     public function commentsValid() {
-        return$this->comments()->whereHas('user', function ($query) {
+        return $this->comments()->whereHas('user', function ($query) {
            $query->whereValid(true);
         });
     }
@@ -43,5 +44,52 @@ class Post extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /**Scopes**/
+    public function scopeActive($query) {
+        return $query->addSelect(
+            'id',
+            'slug',
+            'image',
+            'title',
+            'excerpt',
+            'user_id')
+            ->with('user:id,name')
+            ->whereActive(true);
+    }
+
+    public function scopeActiveByDate($query) {
+        return $query->active()->latest();
+    }
+
+    public function scopeActiveByDateForUser($query, $user_id) {
+        return $query->activeByDate()
+            ->whereHas('user', function ($user) use($user_id) {
+                $user->where('users.id', $user_id);
+            });
+    }
+
+    public function scopeActiveByDateForCategory($query, $category_slug)
+    {
+        return $this->activeByDate()
+            ->whereHas('categories', function ($category) use ($category_slug) {
+                $category->where('categories.slug', $category_slug);
+            });
+    }
+
+    public function scopeHeros($query, $nbr) {
+        return $query->active()->with('categories')->latest('updated_at')->take($nbr);
+    }
+
+    public function scopeBySlug($query, $slug) {
+        return $query->with(
+            'user:id,name,email',
+            'tags:id,tag,slug',
+            'categories:title,slug'
+        )
+            ->withCount('commentsValid')
+            ->whereSlug($slug)
+            ->firstOrFail();
     }
 }
