@@ -33,6 +33,7 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => 'auth'], functi
     Lfm::routes();
 });
 
+
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index']);
