@@ -27,6 +27,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
 
 Route::get('author/{user}', [FrontPostController::class, 'author'])->name('author');
 Route::get('category/{category:slug}', [FrontPostController::class, 'category'])->name('category');
+Route::get('tag/{tag:slug}', [FrontPostController::class, 'tag'])->name('tag');
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => 'auth'], function () {
     Lfm::routes();
